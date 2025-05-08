@@ -1,5 +1,13 @@
 # EXPERIMENT-05-SOIL-MOISTURE-SENSOR-INTERFACE-TO-IOT-DEVELOPMENT-BOARD
 
+**DATE:** 08.05.2025
+
+**NAME:** PRIDEESH M
+
+**REG NO:** 212223040154
+
+**DEPARTMENT:** COMPUTER SCIENCE AND ENGINEERING
+
 ## Aim: 
 
 To Interface a Analog Input  (soil moisture sensor) to ARM IOT development board and write a  program to obtain  the data on the com port 
@@ -107,13 +115,68 @@ GND is the ground pin.
 
 
 ## STM 32 CUBE PROGRAM :
+```
+#include "main.h"
+#include "stdio.h"
 
+#if defined(_GNUC_)
+
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#endif
+uint16_t analogvalue;
+
+ADC_HandleTypeDef hadc;
+
+UART_HandleTypeDef huart2;
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_ADC_Init(void);
+static void MX_USART2_UART_Init(void);
+
+int main(void)
+{
+
+  HAL_Init();
+
+    SystemClock_Config();
+
+    MX_GPIO_Init();
+  MX_ADC_Init();
+  MX_USART2_UART_Init();
+  
+  while (1)
+  {
+    	  HAL_ADC_Start(&hadc);
+
+	  HAL_ADC_PollForConversion(&hadc, HAL_MAX_DELAY);
+	  	  	  analogvalue = HAL_ADC_GetValue(&hadc);
+	  	  	printf("Analog value : %ld\n", analogvalue);
+	  	  	  
+	  	  	  uint32_t soilmoist =100- (100 *analogvalue) / 4095;
+
+	  	  	  printf("Soil moisture : %ld %%\n", soilmoist);
+	  	  	  HAL_Delay(1000);
+    
+  }
+  
+}
+
+PUTCHAR_PROTOTYPE
+{
+	HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+
+	return ch;
+}
+```
 
 
 ## Output screen shots on serial monitor   :
- 
- 
- 
+![Screenshot 2025-05-08 105251](https://github.com/user-attachments/assets/ba34f397-1626-4ff5-9174-6478e4157f8c)
+
+
+## Setup:
+![WhatsApp Image 2025-05-08 at 10 54 29_1bcb2e88](https://github.com/user-attachments/assets/83363f44-4cde-42f3-b03a-bdda76d5ae0d)
+
  
 ## Result :
 Interfacing a Analog Input (soil moisture sensor) with ARM microcontroller based IOT development is executed and the results visualized on serial monitor 
